@@ -31,6 +31,7 @@ function hxlProxyToJSON(input){
 }
 
 function generateMap(geom,data,countryOverview){
+    console.log('data for map');
     console.log(data);
     countryOverview('eth');
 }
@@ -136,9 +137,14 @@ $.when(nonCampCall,largeCampCall, geomCall).then(function(nonCampArgs,largeCampA
             }
         });
 
+        //country overview data for cooking and lighting
+        //could use total as per capita rate as headline figures
+        console.log('Country Overview');
         console.log(lighting);
         console.log(cooking);
-
+        console.log('Example - urban sub cateogry');
+        subCountryOverview(iso3,'urban');
+        console.log('Example - camp');  
         campOverview('Buramino : Point');        
     }
 
@@ -165,10 +171,59 @@ $.when(nonCampCall,largeCampCall, geomCall).then(function(nonCampArgs,largeCampA
                     cooking[key] += value;
                 }                
             }
-        });  
+        });
+
+        //result of particular camp
         console.log(lighting);
         console.log(cooking);      
     }
+
+    let subCountryOverview = function(iso3, nonCampType){
+        let lighting = {};
+        let cooking = {};
+        nonCampData.forEach(function(row){
+            if(row['#country+code']===iso3 && row['#indicator+location'] === nonCampType){
+                let key = 'On grid';
+                let value = Number(row['#indicator+expenditure+grid+value']);
+                if(lighting[key] === undefined){
+                    lighting[key] = value;
+                } else {
+                    lighting[key] += value;
+                }
+
+                key = row['#indicator+lighting+text'];
+                value = Number(row['#indicator+expenditure+offgrid+value']);
+                if(lighting[key] === undefined){
+                    lighting[key] = value;
+                } else {
+                    lighting[key] += value;
+                }
+                
+                key = 'Non Solid';
+                value = Number(row['#indicator+expenditure+nonsolid+value']);
+                if(cooking[key] === undefined){
+                    cooking[key] = value;
+                } else {
+                    cooking[key] += value;
+                }
+
+                key = row['#indicator+cooking+text'];
+                value = Number(row['#indicator+expenditure+solid+value']);
+                if(cooking[key] === undefined){
+                    cooking[key] = value;
+                } else {
+                    cooking[key] += value;
+                }                
+            }
+        });
+
+        //country overview data for cooking and lighting
+        //could use total as per capita rate as headline figures
+        console.log(lighting);
+        console.log(cooking); 
+    }
+
+   
 
     generateMap(geomData,refugeePopData,countryOverview);
 });
