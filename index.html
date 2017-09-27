@@ -6,11 +6,14 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/site.css"/>
         <link rel="stylesheet" type="text/css" href="css/c3.min.css"/>
+        <link rel="stylesheet" type="text/css" href="css/leaflet.css"/>
         <script src="js/jquery.js"></script>
         <script src="js/crossfilter.v1.min.js"></script>
         <script src="js/d3.min.js"></script>
         <script src="js/c3.min.js"></script>
         <script src="js/topojson.v1.min.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-46399763-1']);
@@ -25,7 +28,63 @@
     </head>
     <body>
         <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>Lorem ipsum dolor sit</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <div class="col-md-9">
+                    <div id="map"></div>
+                </div>
+            </div>
         </div> 
+
+        <!-- Modal -->
+        <div id="countryModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-5 overview">
+                                <h5>Overview</h5>
+                                <div class="row">
+                                    <div class="col-md-6 exp-total">
+                                        <h6>Total Expenditure</h6><span></span>
+                                    </div>
+                                    <div class="col-md-6 exp-percapita">
+                                        <h6>Per Capita Expenditure</h6><span></span>
+                                    </div>
+                                </div>
+                                <div id="cookingChart"></div>
+                                <div id="lightingChart"></div>
+                            </div>
+                            <div class="col-md-7 info">
+                                <h5>Futher Information</h5>
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4"><h6>Cooking</h6></div>
+                                    <div class="col-md-4"><h6>Lighting</h6></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 info-labels"></div>
+                                    <div class="col-md-4 cooking"></div>
+                                    <div class="col-md-4 lighting"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="js/site.js"></script>    
     </body>
 </html>
