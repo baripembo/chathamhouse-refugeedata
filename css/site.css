@@ -1,0 +1,27 @@
+.container {
+	padding: 20px 0;
+}
+#map {
+	height: 500px;
+}
+#countryModal .modal-dialog {
+	width: 800px;
+}
+#countryModal .modal-body .overview {
+	border-right: 1px solid #e5e5e5;
+}
+.no-data {
+    cursor: -webkit-grab !important;
+}
+.info-labels {
+	font-size: 11px;
+}
+.exp-total {
+	margin-bottom: 20px;
+}
+.exp-total span {
+	font-size: 20px;
+}
+.exp-percapita span {
+	font-size: 20px;
+}
