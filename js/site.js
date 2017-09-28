@@ -348,7 +348,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         buildModalOverview(iso3, cooking, lighting);
 
         //clear the info columns in modal
-        $('#countryModal').find('.info').children().filter(':gt(2)').remove();
+        $('#countryModal').find('.info').children().filter(':gt(1)').remove();
 
         //get noncamp info
         noncamps.forEach(function(noncamp, id) {
@@ -439,8 +439,8 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
 
         //country overview data for cooking and lighting
         //could use total as per capita rate as headline figures
-        console.log(lighting);
-        console.log(cooking); 
+        // console.log(lighting);
+        // console.log(cooking); 
 
 
         //build modal  
