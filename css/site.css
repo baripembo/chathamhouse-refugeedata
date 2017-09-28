@@ -7,7 +7,11 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
 	font-size: 28px;
 }
+h2 {
+	font-size: 24px;
+}
 h5 {
+	font-weight: 400;
 	text-transform: uppercase;
 }
 h6 {
@@ -20,16 +24,13 @@ h6 {
 	height: 500px;
 }
 #countryModal .modal-dialog {
-	width: 800px;
+	width: 850px;
 }
 #countryModal .modal-body .overview {
 	border-right: 1px solid #e5e5e5;
 }
 .no-data {
     cursor: -webkit-grab !important;
-}
-.exp-total {
-	margin-bottom: 20px;
 }
 .exp-total span,
 .exp-percapita span {
@@ -52,5 +53,13 @@ h6 {
 	margin-top: 10px;
 }
 .info-labels {
+	padding-top: 4px;
 	text-transform: capitalize;
+}
+.info .c3-chart-arc text {
+	display: none;
+}
+.info .cooking,
+.info .lighting {
+	padding-top: 12px;
 }

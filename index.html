@@ -50,29 +50,47 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h3 class="modal-title"></h3>
+                        <h2 class="modal-title"></h2>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-5 overview">
                                 <h5>Overview</h5>
-                                <div class="row">
-                                    <div class="col-md-6 exp-total">
-                                        <h6>Total Expenditure</h6><span></span>
-                                    </div>
-                                    <div class="col-md-6 exp-percapita">
-                                        <h6>Per Capita Expenditure</h6><span></span>
+                                <div class="row overview-cooking">
+                                    <div class="col-md-12">
+                                        <h4 class="text-center">Cooking</h4>
+                                        <div class="row">                                    
+                                            <div class="col-md-6 exp-total">
+                                                <h6>Total Expenditure</h6><span></span>
+                                            </div>
+                                            <div class="col-md-6 exp-percapita">
+                                                <h6>Per Capita Expenditure</h6><span></span>
+                                            </div>
+                                        </div>
+                                        <div id="cookingChart"></div>
                                     </div>
                                 </div>
-                                <div id="cookingChart"></div>
-                                <div id="lightingChart"></div>
+                                <div class="row overview-lighting">
+                                    <div class="col-md-12">
+                                        <h4 class="text-center">Lighting</h4>
+                                        <div class="row">   
+                                            <div class="col-md-6 exp-total">
+                                                <h6>Total Expenditure</h6><span></span>
+                                            </div>
+                                            <div class="col-md-6 exp-percapita">
+                                                <h6>Per Capita Expenditure</h6><span></span>
+                                            </div>
+                                        </div>
+                                        <div id="lightingChart"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-7 info">
                                 <h5>Further Information</h5>
                                 <div class="row">
-                                    <div class="col-md-4"></div>
-                                    <div class="col-md-4"><h6>Cooking</h6></div>
-                                    <div class="col-md-4"><h6>Lighting</h6></div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-5 text-center"><h6>Cooking</h6></div>
+                                    <div class="col-md-5 text-center"><h6>Lighting</h6></div>
                                 </div>
                             </div>
                         </div>
