@@ -8,15 +8,15 @@ let largeCampsURL = 'https://proxy.hxlstandard.org/data.json?filter01=select&sel
 let smallCampsURL = '';
 
 function hxlProxyToJSON(input){
-    var output = [];
-    var keys=[]
+    let output = [];
+    let keys=[]
     input.forEach(function(e,i){
         if(i==0){
             e.forEach(function(e2,i2){
-                var parts = e2.split('+');
-                var key = parts[0]
+                let parts = e2.split('+');
+                let key = parts[0]
                 if(parts.length>1){
-                    var atts = parts.splice(1,parts.length);
+                    let atts = parts.splice(1,parts.length);
                     atts.sort();                    
                     atts.forEach(function(att){
                         key +='+'+att
@@ -25,7 +25,7 @@ function hxlProxyToJSON(input){
                 keys.push(key);
             });
         } else {
-            var row = {};
+            let row = {};
             e.forEach(function(e2,i2){
                 row[keys[i2]] = e2;
             });
@@ -39,8 +39,8 @@ function generateMap(geom,data,countryOverview) {
     //remove loader
     $('.sp-circle').remove();
 
-    var baselayer = L.tileLayer('https://data.humdata.org/mapbox-base-tiles/{z}/{x}/{y}.png', {});
-    var baselayer2 = L.tileLayer('https://data.humdata.org/mapbox-layer-tiles/{z}/{x}/{y}.png', {minZoom: 2});
+    let baselayer = L.tileLayer('https://data.humdata.org/mapbox-base-tiles/{z}/{x}/{y}.png', {});
+    let baselayer2 = L.tileLayer('https://data.humdata.org/mapbox-layer-tiles/{z}/{x}/{y}.png', {minZoom: 2});
 
     map = L.map('map',{
         center: [0,0],
@@ -48,17 +48,17 @@ function generateMap(geom,data,countryOverview) {
         layers: [baselayer,baselayer2]
     });
 
-    var cls;
-    var style = function(feature) {
-        var clr = '#aaaaaa';
-        var borderClr = '#f2f2ef';
-        var fillClr = '#08306b';
-        var fillOpacity = 0;
+    let cls;
+    let style = function(feature) {
+        let clr = '#aaaaaa';
+        let borderClr = '#f2f2ef';
+        let fillClr = '#08306b';
+        let fillOpacity = 0;
         cls = 'country'
 
-        var iso3 = feature.properties['ISO_3'];
+        let iso3 = feature.properties['ISO_3'];
         if (iso3!=null) {
-            var num = data[iso3.toLowerCase()];
+            let num = data[iso3.toLowerCase()];
             if (num!=undefined) {
                 clr = getColor(num);
                 fillOpacity = 0.7;
@@ -109,91 +109,100 @@ function getColor(d) {
 }
 
 function mapClick(e) {
-    var iso3 = e.target.feature.properties['ISO_3'].toLowerCase();
+    let iso3 = e.target.feature.properties['ISO_3'].toLowerCase();
     countryOverview(iso3);
     $('#countryModal').modal('show');
 
     cookingChart.flush();
     lightingChart.flush();
+
+    for (var i=0; i<charts.length; i++) {
+        charts[i].flush();
+    }
+    charts = [];
 }
 
 function buildModalOverview(iso3, cooking, lighting) {
-    var expTotal = 0;
-    var popTotal = refugeePopData[iso3];
-    var modal = $('#countryModal');
+    let expTotalCooking = 0;
+    let expTotalLighting = 0;
+    let popTotal = refugeePopData[iso3];
+    let modal = $('#countryModal');
 
+    //country title
     modal.find('.modal-title').text(countryNames[iso3]);
     
     //cooking
-    var cookingData = [];
-    for (var prop in cooking) {
-        expTotal = (cooking[prop]==undefined) ? expTotal : expTotal + cooking[prop];
+    let cookingData = [];
+    for (let prop in cooking) {
+        expTotalCooking = (cooking[prop]==undefined) ? expTotalCooking : expTotalCooking + cooking[prop];
         cookingData.push([prop, numFormat(cooking[prop])]);
     }
 
     //lighting
-    var lightingData = [];
-    for (var prop in lighting) {
-        expTotal = (lighting[prop]==undefined) ? expTotal : expTotal + lighting[prop];
+    let lightingData = [];
+    for (let prop in lighting) {
+        expTotalLighting = (lighting[prop]==undefined) ? expTotalLighting : expTotalLighting + lighting[prop];
         lightingData.push([prop, numFormat(lighting[prop])]);
     }
 
     //totals
-    modal.find('.exp-total span').text('$'+numFormat(expTotal)+'M');
-    modal.find('.exp-percapita span').text( getExpPerCapita(expTotal, popTotal) );
+    modal.find('.overview-cooking .exp-total span').text( '$'+numFormat(expTotalCooking)+'M' );
+    modal.find('.overview-cooking .exp-percapita span').text( getExpPerCapita(expTotalCooking, popTotal) );
+    modal.find('.overview-lighting .exp-total span').text( '$'+numFormat(expTotalLighting)+'M' );
+    modal.find('.overview-lighting .exp-percapita span').text( getExpPerCapita(expTotalLighting, popTotal) );
 
     //pie charts
-    cookingChart = buildPieChart('cooking',cookingData);
-    lightingChart = buildPieChart('lighting',lightingData);
+    cookingChart = buildPieChart('cooking', cookingData, 300);
+    lightingChart = buildPieChart('lighting', lightingData, 300);
 }
 
 function buildModalInfo(camp) {
-    var expTotalCooking = 0;
-    var expTotalLighting = 0;
-    var campCls = 'camp'+camp.id;
-    var modal = $('#countryModal');
+    let expTotalCooking = 0;
+    let expTotalLighting = 0;
+    let campCls = 'camp'+camp.id;
+    let cookingChartID = 'cooking'+camp.id+'Chart';
+    let lightingChartID = 'lighting'+camp.id+'Chart';
+    let modal = $('#countryModal');
 
     //cooking
-    var cookingData = [];
-    for (var key in camp.cooking) {
+    let cookingData = [];
+    for (let key in camp.cooking) {
         expTotalCooking = (camp.cooking[key]==undefined) ? expTotalCooking : expTotalCooking + camp.cooking[key];
         cookingData.push([key, numFormat(camp.cooking[key])]);
     }
 
     //lighting
-    var lightingData = [];
-    for (var key in camp.lighting) {
+    let lightingData = [];
+    for (let key in camp.lighting) {
         expTotalLighting = (camp.lighting[key]==undefined) ? expTotalLighting : expTotalLighting + camp.lighting[key];
         lightingData.push([key, numFormat(camp.lighting[key])]);
     }
 
-    modal.find('.info').append('<div class="row camp '+campCls+'"><div class="col-md-4 info-labels">'+camp.name+'</div><div class="col-md-4 cooking"></div><div class="col-md-4 lighting"></div></div>');
+    modal.find('.info').append('<div class="row camp '+campCls+'"><div class="col-md-2 info-labels">'+camp.name+'</div><div class="col-md-2" id="'+ cookingChartID +'"></div><div class="col-md-3 cooking"></div><div class="col-md-2" id="'+lightingChartID+'"></div><div class="col-md-3 lighting"></div></div>');
 
     //totals
     modal.find('.'+campCls+' .cooking').html( 'Exp: $'+numFormat(expTotalCooking)+'M<br>Per Cap: '+ getExpPerCapita(expTotalCooking, camp.pop) );
     modal.find('.'+campCls+' .lighting').html( 'Exp: $'+numFormat(expTotalLighting)+'M<br>Per Cap: '+ getExpPerCapita(expTotalLighting, camp.pop) );
 
     //pie charts
-    //cookingChart = buildPieChart('cooking',cookingData);
-    //lightingChart = buildPieChart('lighting',lightingData);
+    let cookingChart = buildPieChart('cooking'+camp.id, cookingData, 75, false);
+    let lightingChart = buildPieChart('lighting'+camp.id, lightingData, 75, false);
+
+    //save reference to charts
+    charts.push(cookingChart);
+    charts.push(lightingChart);
 }
 
-function buildPieChart(title, data) {
-    var chart = c3.generate({
-        title: {
-            text: title
-        },
+function buildPieChart(title, data, height, showLegend=true) {
+    let clrs = (title.indexOf('cooking')>-1) ? 'cooking' : 'lighting';
+    let chart = c3.generate({
         bindto: '#'+title+'Chart',
         data: {
             columns: data,
             type : 'pie'
         },
-        size: {
-            height: 300
-        },
-        color: {
-            pattern: pieColors
-        },
+        size: { height: height },
+        color: { pattern: pieColors[clrs] },
         pie: {
             label: {
                 format: function (value, ratio, id) {
@@ -201,6 +210,9 @@ function buildPieChart(title, data) {
                 },
                 threshold: 0.05
             }
+        },
+        legend: {
+            show: showLegend
         }
     });
     return chart;
@@ -262,7 +274,11 @@ let countriesCall = $.ajax({
 
 let countryOverview, refugeePopData, countryNames;
 let cookingChart, lightingChart;
-let pieColors = ['#005984','#397D9D','#72A2B7','#ABC6D1'];
+let charts = [];
+let cookingColors = ['#005984','#2D7698','#5B93AD','#88B0C1','#B6CDD6','#E4EBEB'];
+let lightingColors = ['#629C8D','#7CAB9F','#96BBB2','#B0CBC5','#CADBD8','#E4EBEB'];
+let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
+//let lightingColors = {'Torch-dependent':'#629C8D','Solar/mini-grid':'#7CAB9F','Solar/diesel':'#96BBB2','Solar-dependent':'#B0CBC5','Kerosene-dependent':'#B0CBC5'};
 
 $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampArgs,largeCampArgs,geomArgs,countriesArgs){
     let nonCampData = hxlProxyToJSON(nonCampArgs[0]);
@@ -357,7 +373,8 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
 
         //get camp info
         camps.forEach(function(camp, id) {
-            campOverview(camp, id);
+            //+100 so ids dont overlap with noncamp ids
+            campOverview(camp, id+100);
         });
     }
 
@@ -446,6 +463,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         //build modal  
         noncamp.cooking = cooking;
         noncamp.lighting = lighting;
+        console.log('build noncamp');
         buildModalInfo(noncamp);
     }
 
