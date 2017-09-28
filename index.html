@@ -6,7 +6,9 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/site.css"/>
         <link rel="stylesheet" type="text/css" href="css/c3.min.css"/>
+        <link rel="stylesheet" type="text/css" href="css/loader.css"/>
         <link rel="stylesheet" type="text/css" href="css/leaflet.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
         <script src="js/jquery.js"></script>
         <script src="js/crossfilter.v1.min.js"></script>
         <script src="js/d3.min.js"></script>
@@ -30,11 +32,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <h3>Lorem ipsum dolor sit</h3>
+                    <h1>Lorem ipsum dolor sit</h1>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 </div>
                 <div class="col-md-9">
-                    <div id="map"></div>
+                    <div id="map">
+                        <div class="sp sp-circle"></div>
+                    </div>
                 </div>
             </div>
         </div> 
@@ -46,7 +50,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title"></h4>
+                        <h3 class="modal-title"></h3>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -64,16 +68,11 @@
                                 <div id="lightingChart"></div>
                             </div>
                             <div class="col-md-7 info">
-                                <h5>Futher Information</h5>
+                                <h5>Further Information</h5>
                                 <div class="row">
                                     <div class="col-md-4"></div>
                                     <div class="col-md-4"><h6>Cooking</h6></div>
                                     <div class="col-md-4"><h6>Lighting</h6></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4 info-labels"></div>
-                                    <div class="col-md-4 cooking"></div>
-                                    <div class="col-md-4 lighting"></div>
                                 </div>
                             </div>
                         </div>

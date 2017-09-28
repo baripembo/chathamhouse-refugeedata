@@ -1,3 +1,18 @@
+body, h1, h2, h3, h4, h5, h6 {
+	font-family: 'Source Sans Pro', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 700;
+}
+h1 {
+	font-size: 28px;
+}
+h5 {
+	text-transform: uppercase;
+}
+h6 {
+	margin-bottom: 0;
+}
 .container {
 	padding: 20px 0;
 }
@@ -13,15 +28,29 @@
 .no-data {
     cursor: -webkit-grab !important;
 }
-.info-labels {
-	font-size: 11px;
-}
 .exp-total {
 	margin-bottom: 20px;
 }
-.exp-total span {
-	font-size: 20px;
-}
+.exp-total span,
 .exp-percapita span {
-	font-size: 20px;
+	font-size: 28px;
+}
+#cookingChart,
+#lightingChart {
+	margin-bottom: 20px;
+	text-align: center;
+}
+.c3-legend-item, .c3-chart-arc text {
+	font-family: 'Source Sans Pro', sans-serif;
+}
+.c3-title {
+	font: 14px 'Source Sans Pro', sans-serif !important;
+	text-transform: capitalize;
+}
+.camp {
+	font-size: 12px;
+	margin-top: 10px;
+}
+.info-labels {
+	text-transform: capitalize;
 }
