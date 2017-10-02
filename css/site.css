@@ -18,19 +18,23 @@ h6 {
 	margin-bottom: 0;
 }
 .container {
-	padding: 20px 0;
+	padding: 40px 0 20px;
 }
 #map {
 	height: 500px;
 }
+.no-data {
+    cursor: -webkit-grab !important;
+}
 #countryModal .modal-dialog {
 	width: 850px;
 }
+#countryModal .modal-body {
+	max-height: 650px;
+	overflow: scroll;
+}
 #countryModal .modal-body .overview {
 	border-right: 1px solid #e5e5e5;
-}
-.no-data {
-    cursor: -webkit-grab !important;
 }
 .exp-total span,
 .exp-percapita span {
@@ -38,7 +42,6 @@ h6 {
 }
 #cookingChart,
 #lightingChart {
-	margin-bottom: 20px;
 	text-align: center;
 }
 .c3-legend-item, .c3-chart-arc text {
@@ -61,5 +64,52 @@ h6 {
 }
 .info .cooking,
 .info .lighting {
-	padding-top: 12px;
+	padding-top: 18px;
+}
+#legend ul {
+	font-size: 12px;
+	list-style: none;
+	padding-left: 0;
+	padding-top: 5px;
+	text-align: left;
+}
+#legend li .square {
+	display: inline-block;
+	margin-right: 4px;
+	height: 8px;
+	width: 8px;
+}
+#legend {
+	margin-top: 10px;
+}
+.modal-footer .form-link {
+	padding-top: 7px;
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+    	padding: 20px 10px;
+    }
+	#countryModal .modal-dialog {
+		width: 100%;
+	}
+	.exp-percapita {
+		padding-right: 9px;
+	}
+	.info .cooking,
+	.info .lighting {
+		padding-right: 14px;
+		padding-top: 9px;
+	}
+	.overview-lighting,
+	.overview-cooking {
+		margin-bottom: 20px;
+	}
+}
+
+@media only screen and (max-width: 414px) {
+	.overview-lighting,
+	.overview-cooking {
+		margin-bottom: 0px;
+	}
 }

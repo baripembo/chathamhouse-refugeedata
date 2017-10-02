@@ -130,6 +130,9 @@ function buildModalOverview(iso3, cooking, lighting) {
 
     //country title
     modal.find('.modal-title').text(countryNames[iso3]);
+
+    //pre-populate feedback form link
+    setFormLink(countryNames[iso3]);
     
     //cooking
     let cookingData = [];
@@ -152,8 +155,8 @@ function buildModalOverview(iso3, cooking, lighting) {
     modal.find('.overview-lighting .exp-percapita span').text( getExpPerCapita(expTotalLighting, popTotal) );
 
     //pie charts
-    cookingChart = buildPieChart('cooking', cookingData, 300);
-    lightingChart = buildPieChart('lighting', lightingData, 300);
+    cookingChart = buildPieChart('cooking', cookingData, 200);
+    lightingChart = buildPieChart('lighting', lightingData, 200);
 }
 
 function buildModalInfo(camp) {
@@ -178,15 +181,15 @@ function buildModalInfo(camp) {
         lightingData.push([key, numFormat(camp.lighting[key])]);
     }
 
-    modal.find('.info').append('<div class="row camp '+campCls+'"><div class="col-md-2 info-labels">'+camp.name+'</div><div class="col-md-2" id="'+ cookingChartID +'"></div><div class="col-md-3 cooking"></div><div class="col-md-2" id="'+lightingChartID+'"></div><div class="col-md-3 lighting"></div></div>');
+    modal.find('.info .location').append('<div class="row camp '+campCls+'"><div class="col-sm-2 col-xs-12 info-labels">'+camp.name+'</div><div class="col-xs-2" id="'+ cookingChartID +'"></div><div class="col-sm-3 col-xs-4 cooking"></div><div class="col-xs-2" id="'+lightingChartID+'"></div><div class="col-sm-3 col-xs-4 lighting"></div></div>');
 
     //totals
     modal.find('.'+campCls+' .cooking').html( 'Exp: $'+numFormat(expTotalCooking)+'M<br>Per Cap: '+ getExpPerCapita(expTotalCooking, camp.pop) );
     modal.find('.'+campCls+' .lighting').html( 'Exp: $'+numFormat(expTotalLighting)+'M<br>Per Cap: '+ getExpPerCapita(expTotalLighting, camp.pop) );
 
     //pie charts
-    let cookingChart = buildPieChart('cooking'+camp.id, cookingData, 75, false);
-    let lightingChart = buildPieChart('lighting'+camp.id, lightingData, 75, false);
+    let cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
+    let lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
 
     //save reference to charts
     charts.push(cookingChart);
@@ -199,10 +202,19 @@ function buildPieChart(title, data, height, showLegend=true) {
         bindto: '#'+title+'Chart',
         data: {
             columns: data,
-            type : 'pie'
+            type : 'pie',
+            color: function (color, d) {
+                // d will be 'id' when called for legends
+                var colors = pieColors[clrs];
+                if(typeof d === 'object') {
+                    return colors[d.id];
+                }else {
+                    return colors[d];
+                }
+            }
         },
         size: { height: height },
-        color: { pattern: pieColors[clrs] },
+        //color: { pattern: pieColors[clrs] },
         pie: {
             label: {
                 format: function (value, ratio, id) {
@@ -212,10 +224,25 @@ function buildPieChart(title, data, height, showLegend=true) {
             }
         },
         legend: {
+            position: 'right',
             show: showLegend
         }
     });
     return chart;
+}
+
+function buildLegend() {
+    let legend = $('#countryModal').find('#legend');
+    for (let pie in pieColors) {
+        let leg = legend.find('.'+pie+'Legend ul');
+        for (let color in pieColors[pie]) {
+            leg.append('<li><div class="square" style="background-color:' + pieColors[pie][color] + '"></div> ' + color + '</li>');
+        }
+    }
+}
+
+function setFormLink(country) {
+    $('.form-link').attr('href', 'https://docs.google.com/forms/d/e/1FAIpQLSdRLnbL31zoyNunwPhfrSXzkf7FCTFHRS0jHK8n736W7o58Hw/viewform?usp=pp_url&entry.1658201850=' + country + '&entry.1869536362');
 }
 
 function getExpPerCapita(total, pop) {
@@ -275,10 +302,9 @@ let countriesCall = $.ajax({
 let countryOverview, refugeePopData, countryNames;
 let cookingChart, lightingChart;
 let charts = [];
-let cookingColors = ['#005984','#2D7698','#5B93AD','#88B0C1','#B6CDD6','#E4EBEB'];
-let lightingColors = ['#629C8D','#7CAB9F','#96BBB2','#B0CBC5','#CADBD8','#E4EBEB'];
+let lightingColors = {'On grid':'#629C8D','Torch-dependent':'#7CAB9F','Kerosene-dependent':'#96BBB2','Solar/mini-grid':'#B0CBC5','Solar/diesel':'#CADBD8','Solar-dependent':'#E4EBEB'};
+let cookingColors = {'Non Solid':'#005984','Firewood-dependent':'#267195','Firewood mix':'#4C89A6','Kerosene dependent':'#72A2B7','LPG fuelled':'#98BAC8','Alternative biomass':'#BED2D9'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
-//let lightingColors = {'Torch-dependent':'#629C8D','Solar/mini-grid':'#7CAB9F','Solar/diesel':'#96BBB2','Solar-dependent':'#B0CBC5','Kerosene-dependent':'#B0CBC5'};
 
 $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampArgs,largeCampArgs,geomArgs,countriesArgs){
     let nonCampData = hxlProxyToJSON(nonCampArgs[0]);
@@ -291,13 +317,11 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         let lighting = {};
         let cooking = {};
         let camps = [];
-        let noncamps = [];
 
         nonCampData.forEach(function(row){
             if(row['#country+code']===iso3){
                 let key = 'On grid';
                 let value = Number(row['#indicator+expenditure+grid+value']);
-                noncamps.push(row['#indicator+location']);
                 if(lighting[key] === undefined){
                     lighting[key] = value;
                 } else {
@@ -364,12 +388,10 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         buildModalOverview(iso3, cooking, lighting);
 
         //clear the info columns in modal
-        $('#countryModal').find('.info').children().filter(':gt(1)').remove();
+        $('#countryModal').find('.camp').remove();
 
         //get noncamp info
-        noncamps.forEach(function(noncamp, id) {
-            subCountryOverview(iso3, noncamp, id);
-        });
+        subCountryOverview(iso3);
 
         //get camp info
         camps.forEach(function(camp, id) {
@@ -413,12 +435,12 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         buildModalInfo(camp);
     }
 
-    let subCountryOverview = function(iso3, nonCampType, id){
-        let noncamp = {'name':nonCampType, 'id': id};
+    let subCountryOverview = function(iso3){
+        let noncamp = {'name':'Non-camp', 'id':0};
         let lighting = {};
         let cooking = {};
         nonCampData.forEach(function(row){
-            if(row['#country+code']===iso3 && row['#indicator+location'] === nonCampType){
+            if(row['#country+code']===iso3){
                 let key = 'On grid';
                 let value = Number(row['#indicator+expenditure+grid+value']);
                 noncamp.pop = Number(row['#population+hh+num']);
@@ -463,9 +485,9 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         //build modal  
         noncamp.cooking = cooking;
         noncamp.lighting = lighting;
-        console.log('build noncamp');
         buildModalInfo(noncamp);
     }
 
     generateMap(geomData,refugeePopData,countryOverview);
+    buildLegend();
 });
