@@ -266,7 +266,7 @@ function getRefugeesPerCountry(datasets){
             } else {
                 output[country] += Math.round(Number(row['#population+hh+num']));
             }
-        });        
+        });      
     });
     return output;
 }
@@ -383,9 +383,9 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
 
         //country overview data for cooking and lighting
         //could use total as per capita rate as headline figures
-        console.log('Country Overview');
-        console.log(lighting);
-        console.log(cooking);
+        // console.log('Country Overview');
+        // console.log(lighting);
+        // console.log(cooking);
         // console.log('Example - urban sub cateogry');
         // subCountryOverview(iso3,'urban');
         //console.log('Example - camp');  
@@ -446,11 +446,12 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         let noncamp = {'name':'Non-camp', 'id':0};
         let lighting = {};
         let cooking = {};
+        noncamp.pop = 0;
         nonCampData.forEach(function(row){
             if(row['#country+code']===iso3){
                 let key = 'On grid';
                 let value = Number(row['#indicator+expenditure+grid+value']);
-                noncamp.pop = Number(row['#population+hh+num']);
+                noncamp.pop += Math.round(row['#population+hh+num']);
                 if(lighting[key] === undefined){
                     lighting[key] = value;
                 } else {
