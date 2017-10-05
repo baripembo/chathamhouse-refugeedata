@@ -12,6 +12,7 @@ h2 {
 }
 h5 {
 	font-weight: 400;
+	margin-top: 0;
 	text-transform: uppercase;
 }
 h6 {
@@ -26,11 +27,14 @@ h6 {
 .no-data {
     cursor: -webkit-grab !important;
 }
+#countryModal .modal-header {
+	padding: 10px 15px;
+}
 #countryModal .modal-dialog {
 	width: 850px;
 }
 #countryModal .modal-body {
-	max-height: 650px;
+	max-height: 700px;
 	overflow: scroll;
 }
 #countryModal .modal-body .overview {
