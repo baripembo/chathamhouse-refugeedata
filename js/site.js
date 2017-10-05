@@ -40,13 +40,15 @@ function generateMap(geom,data,countryOverview) {
     $('.sp-circle').remove();
 
     let baselayer = L.tileLayer('https://data.humdata.org/mapbox-base-tiles/{z}/{x}/{y}.png', {});
-    let baselayer2 = L.tileLayer('https://data.humdata.org/mapbox-layer-tiles/{z}/{x}/{y}.png', {minZoom: 2});
+    let labels = L.tileLayer('https://data.humdata.org/mapbox-layer-tiles/{z}/{x}/{y}.png', {minZoom: 2, pane: 'labels'});
 
     map = L.map('map',{
         center: [0,0],
         zoom: 2,
-        layers: [baselayer,baselayer2]
+        layers: [baselayer]
     });
+
+    map.createPane('labels');
 
     let cls;
     let style = function(feature) {
@@ -90,6 +92,11 @@ function generateMap(geom,data,countryOverview) {
             }
         }
     }).addTo(map);
+
+    map.getPane('labels').style.zIndex = 650;
+    map.getPane('labels').style.pointerEvents = 'none';
+
+    labels.addTo(map);
 }
 
 function getColor(d) {
