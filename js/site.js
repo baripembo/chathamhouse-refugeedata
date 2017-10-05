@@ -1,9 +1,9 @@
-let urbanURL = encodeURIComponent('https://feature-data.humdata.org/dataset/8da14a27-413d-4485-ac94-90caa5a5d8d1/resource/b67db251-893b-4aac-b389-51573cf321c0/download/urban_consumption.csv');
-let slumURL = encodeURIComponent('https://feature-data.humdata.org/dataset/8da14a27-413d-4485-ac94-90caa5a5d8d1/resource/1f49bffe-910e-47ca-a1df-7d6763ef9d40/download/slum_consumption.csv');
-let ruralURL = encodeURIComponent('https://feature-data.humdata.org/dataset/8da14a27-413d-4485-ac94-90caa5a5d8d1/resource/af662f6f-ba18-4fee-b59e-2562f482e70d/download/rural_consumption.csv');
+let urbanURL = encodeURIComponent('https://test-data.humdata.org/dataset/5cf6e9b1-43ca-49f2-bca4-31b9903569a0/resource/42b03f40-fbdd-4da9-9ed7-dcc429cfbe9d/download/urban_consumption.csv');
+let slumURL = encodeURIComponent('https://test-data.humdata.org/dataset/5cf6e9b1-43ca-49f2-bca4-31b9903569a0/resource/d4a51a56-7308-4dfd-8806-ff56216ccea8/download/slum_consumption.csv');
+let ruralURL = encodeURIComponent('https://test-data.humdata.org/dataset/5cf6e9b1-43ca-49f2-bca4-31b9903569a0/resource/681584b5-eabf-42c6-828a-7b63b9ad0d97/download/rural_consumption.csv');
 let nonCampURL = 'https://proxy.hxlstandard.org/data.json?filter01=add&add-tag01=%23indicator%2Blocation&add-value01=urban&filter02=append&append-dataset02-01='+slumURL+'&filter03=replace&replace-pattern03=%5E%24&replace-regex03=on&replace-value03=slum&replace-tags03=%23indicator%2Blocation&filter04=append&append-dataset04-01='+ruralURL+'&filter05=replace&replace-pattern05=%5E%24&replace-regex05=on&replace-value05=rural&replace-tags05=%23indicator%2Blocation&filter06=select&select-query06-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+urbanURL;
 
-let campURL = encodeURIComponent('https://feature-data.humdata.org/dataset/8da14a27-413d-4485-ac94-90caa5a5d8d1/resource/d5aa7ddc-728e-4857-9cb3-9fb84d21aec6/download/camp_consumption.csv');
+let campURL = encodeURIComponent('https://test-data.humdata.org/dataset/5cf6e9b1-43ca-49f2-bca4-31b9903569a0/resource/e7fd9872-c69d-47a0-b8cb-d56f274f8ad6/download/camp_consumption.csv');
 let largeCampsURL = 'https://proxy.hxlstandard.org/data.json?filter01=select&select-query01-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+campURL;
 let smallCampsURL = '';
 
