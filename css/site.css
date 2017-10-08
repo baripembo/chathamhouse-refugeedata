@@ -19,10 +19,34 @@ h6 {
 	margin-bottom: 0;
 }
 .container {
-	padding: 40px 0 20px;
+	padding: 20px 0;
 }
 #map {
 	height: 500px;
+}
+#mapLegend {
+	background-color: rgba(255, 255, 255, 0.9);
+	bottom: 10px;
+	height: 175px;
+	left: 25px;
+	padding: 10px;
+	position: absolute;
+	width: 155px;
+	z-index: 400;
+}
+#mapLegend ul {
+    list-style: none;
+    padding-left: 0;
+}
+#mapLegend li {
+    line-height: 20px;
+    margin-bottom: 2px;
+}
+#mapLegend .color {
+    float: left;
+    height: 20px;
+    margin-right: 5px;
+	width: 35px;
 }
 .no-data {
     cursor: -webkit-grab !important;
@@ -31,7 +55,7 @@ h6 {
 	padding: 10px 15px;
 }
 #countryModal .modal-dialog {
-	width: 850px;
+	width: 900px;
 }
 #countryModal .modal-body {
 	max-height: 700px;
@@ -96,6 +120,9 @@ h6 {
     }
 	#countryModal .modal-dialog {
 		width: 100%;
+	}
+	#countryModal .modal-body .info {
+		margin-top: 20px;
 	}
 	.exp-percapita {
 		padding-right: 9px;

@@ -100,19 +100,23 @@ function generateMap(geom,data,countryOverview) {
 }
 
 function getColor(d) {
-    return  d > 800000 ? '#005984' :
-            d > 600000 ? '#13658C' :
-            d > 400000 ? '#267195' :
-            d > 200000 ? '#397D9D' :
-            d > 80000  ? '#4C89A6' :
-            d > 60000  ? '#5F95AE' :
-            d > 40000  ? '#72A2B7' :
-            d > 20000  ? '#85AEC0' :
-            d > 8000   ? '#98BAC8' :
-            d > 6000   ? '#ABC6D1' :
-            d > 4000   ? '#BED2D9' :
-            d > 2000   ? '#D1DEE2' :
+    return  d > 500000 ? '#005984' :
+            d > 100000 ? '#267195' :
+            d > 50000  ? '#4C89A6' :
+            d > 10000  ? '#72A2B7' :
+            d > 5000   ? '#98BAC8' :
+            d > 1000   ? '#BED2D9' :
                          '#E4EBEB' ;
+}
+
+function generateMapLegend() {
+    let legend = $('#mapLegend');
+    let colors = {'500,000': '#005984', '100,000':'#267195', '50,000': '#4C89A6', '10,000': '#72A2B7', '5,000': '#98BAC8', '1,000': '#BED2D9'};
+
+    legend.append('<h5>Refugee Population</h5><ul></ul>');
+    for (let key in colors) {
+        legend.find('ul').append('<li><div class="color" style="background-color:' + colors[key] + '"></div> ' + key + '</li>');
+    }
 }
 
 function mapClick(e) {
@@ -253,7 +257,10 @@ function setFormLink(country) {
 }
 
 function getExpPerCapita(total, pop) {
-    return '$'+numFormat((total*1000000)/pop);
+    if (pop<=0)
+        return '$'+numFormat(0);
+    else
+        return '$'+numFormat((total*1000000)/pop);
 }
 
 function getRefugeesPerCountry(datasets){
@@ -497,5 +504,6 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
     }
 
     generateMap(geomData,refugeePopData,countryOverview);
+    generateMapLegend();
     buildLegend();
 });
