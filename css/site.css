@@ -20,7 +20,7 @@ h6 {
 }
 .viz-container {
     width: 1170px;
-    padding: 20px 15px;
+    padding: 20px 0;
     margin-right: auto;
     margin-left: auto;
 }
