@@ -18,8 +18,11 @@ h5 {
 h6 {
 	margin-bottom: 0;
 }
-.container {
-	padding: 20px 0;
+.viz-container {
+    width: 1170px;
+    padding: 20px 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 #map {
 	height: 500px;
@@ -115,8 +118,9 @@ h6 {
 }
 
 @media only screen and (max-width: 768px) {
-    .container {
-    	padding: 20px 10px;
+    .viz-container {
+    	padding: 20px;
+    	width: 100%;
     }
 	#countryModal .modal-dialog {
 		width: 100%;
