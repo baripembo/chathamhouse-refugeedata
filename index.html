@@ -6,11 +6,16 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/site.css"/>
         <link rel="stylesheet" type="text/css" href="css/c3.min.css"/>
+        <link rel="stylesheet" type="text/css" href="css/loader.css"/>
+        <link rel="stylesheet" type="text/css" href="css/leaflet.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
         <script src="js/jquery.js"></script>
         <script src="js/crossfilter.v1.min.js"></script>
         <script src="js/d3.min.js"></script>
         <script src="js/c3.min.js"></script>
         <script src="js/topojson.v1.min.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-46399763-1']);
@@ -24,8 +29,91 @@
         </script>         
     </head>
     <body>
-        <div class="container">
+        <div class="viz-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Lorem ipsum dolor sit</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <div class="col-md-12">
+                    <div id="map">
+                        <div class="sp sp-circle"></div>
+                    </div>
+                    <div id="mapLegend"></div>
+                </div>
+            </div>
         </div> 
+
+        <!-- Modal -->
+        <div id="countryModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h2 class="modal-title"></h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-5 overview">
+                                <h5>Overview</h5>
+                                <div class="row overview-cooking">
+                                    <div class="col-md-12">
+                                        <h4 class="text-center">Cooking</h4>
+                                        <div class="row">                                    
+                                            <div class="col-xs-6 exp-total">
+                                                <h6>Total Expenditure</h6><span></span>
+                                            </div>
+                                            <div class="col-xs-6 exp-percapita">
+                                                <h6>Per Capita Expenditure</h6><span></span>
+                                            </div>
+                                        </div>
+                                        <div id="cookingChart"></div>
+                                    </div>
+                                </div>
+                                <div class="row overview-lighting">
+                                    <div class="col-md-12">
+                                        <h4 class="text-center">Lighting</h4>
+                                        <div class="row">   
+                                            <div class="col-xs-6 exp-total">
+                                                <h6>Total Expenditure</h6><span></span>
+                                            </div>
+                                            <div class="col-xs-6 exp-percapita">
+                                                <h6>Per Capita Expenditure</h6><span></span>
+                                            </div>
+                                        </div>
+                                        <div id="lightingChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7 info">
+                                <h5>Further Information</h5>
+                                <div class="row">
+                                    <div class="col-sm-2 col-xs-0"></div>
+                                    <div class="col-sm-5 col-xs-6 text-center"><h6>Cooking</h6></div>
+                                    <div class="col-sm-5 col-xs-6 text-center"><h6>Lighting</h6></div>
+                                </div>
+                                <div class="location"></div>
+                                <div class="row">
+                                    <div class="col-sm-2 col-xs-0"></div>
+                                    <div class="col-sm-8 col-xs-12 text-center"><h6>Legend</h6></div>
+                                </div>
+                                <div id="legend" class="row">
+                                    <div class="col-sm-2 col-xs-0"></div>
+                                    <div class="col-sm-5 col-xs-6 cookingLegend"><ul></ul></div>
+                                    <div class="col-sm-5 col-xs-6 lightingLegend"><ul></ul></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="form-link pull-left" target="_blank">Send feedback</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="js/site.js"></script>    
     </body>
 </html>
