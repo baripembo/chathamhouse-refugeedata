@@ -144,6 +144,9 @@ function buildModalOverview(iso3, cooking, lighting) {
 
     //pre-populate feedback form link
     setFormLink(countryNames[iso3]);
+
+    //population
+    modal.find('.overview-population span').text(popFormat(popTotal));
     
     //cooking
     let cookingData = [];
@@ -170,7 +173,7 @@ function buildModalOverview(iso3, cooking, lighting) {
     lightingChart = buildPieChart('lighting', lightingData, 200);
 }
 
-function buildModalInfo(camp) {
+function buildModalInfo(camp, type='camp') {
     let expTotalCooking = 0;
     let expTotalLighting = 0;
     let campCls = 'camp'+camp.id;
@@ -195,12 +198,20 @@ function buildModalInfo(camp) {
     modal.find('.info .location').append('<div class="row camp '+campCls+'"><div class="col-sm-2 col-xs-12 info-labels">'+camp.name+'</div><div class="col-xs-2" id="'+ cookingChartID +'"></div><div class="col-sm-3 col-xs-4 cooking"></div><div class="col-xs-2" id="'+lightingChartID+'"></div><div class="col-sm-3 col-xs-4 lighting"></div></div>');
 
     //totals
-    modal.find('.'+campCls+' .cooking').html( 'Exp: $'+numFormat(expTotalCooking)+'M<br>Per Cap: '+ getExpPerCapita(expTotalCooking, camp.pop) );
-    modal.find('.'+campCls+' .lighting').html( 'Exp: $'+numFormat(expTotalLighting)+'M<br>Per Cap: '+ getExpPerCapita(expTotalLighting, camp.pop) );
+    modal.find('.'+campCls+' .cooking').html( 'Exp/yr: $'+numFormat2(expTotalCooking)+'M<br>Per Cap: '+ getExpPerCapita(expTotalCooking, camp.pop) +'<br>Pop: '+ popFormat(camp.pop) );
+    modal.find('.'+campCls+' .lighting').html( 'Exp/yr: $'+numFormat2(expTotalLighting)+'M<br>Per Cap: '+ getExpPerCapita(expTotalLighting, camp.pop) +'<br>Pop: '+ popFormat(camp.pop) );
 
     //pie charts
-    let cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
-    let lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
+    let cookingChart, lightingChart;
+    if (type=='camp') {
+        cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
+        lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
+    }
+    else {
+        cookingChart = buildDonutChart('cooking'+camp.id, cookingData, 70, false);
+        lightingChart = buildDonutChart('lighting'+camp.id, lightingData, 70, false);
+        modal.find(campCls).css('border','1px solid #000');
+    }
 
     //save reference to charts
     charts.push(cookingChart);
@@ -215,7 +226,6 @@ function buildPieChart(title, data, height, showLegend=true) {
             columns: data,
             type : 'pie',
             color: function (color, d) {
-                // d will be 'id' when called for legends
                 var colors = pieColors[clrs];
                 if(typeof d === 'object') {
                     return colors[d.id];
@@ -227,6 +237,40 @@ function buildPieChart(title, data, height, showLegend=true) {
         size: { height: height },
         //color: { pattern: pieColors[clrs] },
         pie: {
+            label: {
+                format: function (value, ratio, id) {
+                    return d3.format('$')(value)+'M';
+                },
+                threshold: 0.05
+            }
+        },
+        legend: {
+            position: 'right',
+            show: showLegend
+        }
+    });
+    return chart;
+}
+
+function buildDonutChart(title, data, height, showLegend=true) {
+    let clrs = (title.indexOf('cooking')>-1) ? 'cooking' : 'lighting';
+    let chart = c3.generate({
+        bindto: '#'+title+'Chart',
+        data: {
+            columns: data,
+            type : 'donut',
+            color: function (color, d) {
+                var colors = pieColors[clrs];
+                if(typeof d === 'object') {
+                    return colors[d.id];
+                }else {
+                    return colors[d];
+                }
+            }
+        },
+        size: { height: height },
+        //color: { pattern: pieColors[clrs] },
+        donut: {
             label: {
                 format: function (value, ratio, id) {
                     return d3.format('$')(value)+'M';
@@ -286,8 +330,9 @@ function getCountryNames(datasets) {
     return output;
 }
 
-
 let numFormat = function(d){return d3.format('.2f')(d)};
+let numFormat2 = function(d){return d3.format('.3f')(d)};
+let popFormat = d3.format('.2s');
 
 let nonCampCall = $.ajax({ 
     type: 'GET', 
@@ -368,10 +413,16 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
             }
         });
 
+        //sort camps by population
+        // largeCampData.sort(function(a, b) {
+        //     return parseFloat(b['#population+hh+num']) - parseFloat(a['#population+hh+num']);
+        // });
+
         largeCampData.forEach(function(row){
             if(row['#country+code']===iso3){
                 key = row['#indicator+lighting+text'];
                 value = Number(row['#indicator+expenditure+offgrid+value']);
+                row['#loc+name'] = row['#loc+name'].replace(' :', ':');
                 camps.push(row['#loc+name']);
                 if(lighting[key] === undefined){
                     lighting[key] = value;
@@ -500,7 +551,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         //build modal  
         noncamp.cooking = cooking;
         noncamp.lighting = lighting;
-        buildModalInfo(noncamp);
+        buildModalInfo(noncamp, 'noncamp');
     }
 
     generateMap(geomData,refugeePopData,countryOverview);
