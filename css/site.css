@@ -68,7 +68,8 @@ h6 {
 	border-right: 1px solid #e5e5e5;
 }
 .exp-total span,
-.exp-percapita span {
+.exp-percapita span,
+.overview-population span {
 	font-size: 28px;
 }
 #cookingChart,
@@ -86,6 +87,10 @@ h6 {
 	font-size: 12px;
 	margin-top: 10px;
 }
+.camp:first-child {
+	border-bottom: 1px solid #e5e5e5;
+	padding-bottom: 12px;
+}
 .info-labels {
 	padding-top: 4px;
 	text-transform: capitalize;
@@ -95,7 +100,7 @@ h6 {
 }
 .info .cooking,
 .info .lighting {
-	padding-top: 18px;
+	padding-top: 10px;
 }
 #legend ul {
 	font-size: 12px;
@@ -113,8 +118,16 @@ h6 {
 #legend {
 	margin-top: 10px;
 }
-.modal-footer .form-link {
+.modal-header .close {
+	margin-top: 6px;
+}
+.form-link {
+	padding-right: 30px;
 	padding-top: 7px;
+}
+.divider {
+	padding-bottom: 12px;
+	border-bottom: 1px solid #ccc;
 }
 
 @media only screen and (max-width: 768px) {
