@@ -99,16 +99,6 @@ function generateMap(geom,cookingPerCountry) {
     labels.addTo(map);
 }
 
-function getColor(d) {
-    return  d > 500000 ? '#005984' :
-            d > 100000 ? '#267195' :
-            d > 50000  ? '#4C89A6' :
-            d > 10000  ? '#72A2B7' :
-            d > 5000   ? '#98BAC8' :
-            d > 1000   ? '#BED2D9' :
-                         '#E4EBEB' ;
-}
-
 function generateMapLegend() {
     let legend = $('#mapLegend');
     legend.append('<h5>Cooking Fuel Source</h5><ul></ul>');
@@ -406,8 +396,9 @@ let countriesCall = $.ajax({
 let countryOverview, refugeePopData, countryNames, cookingPerCountry;
 let cookingChart, lightingChart;
 let charts = [];
-let lightingColors = {'On grid':'#669CB5','Torch-dependent':'#68B597','Kerosene-dependent':'#9EA4F2','Solar/mini-grid':'#F2A99E','Solar/diesel':'#D47D71','Solar-dependent':'#7178D4'};
-let cookingColors = {'Non Solid':'#005A84','Firewood-dependent':'#4D917B','Firewood mix':'#5E68EA','LPG fuelled':'#EA6F5E','Alternative biomass':'#B72712','Kerosene dependent':'#121EB7'};
+let lightingColors = {'On grid':'#8bb2cd','Torch-dependent':'#bdd2c8','Kerosene-dependent':'#f2d9a3','Solar/mini-grid':'#d8ece8','Solar/diesel':'#dfd0c0','Solar-dependent':'#f4c5a0'};
+//let cookingColors = {'Non Solid':'#005984','Firewood-dependent':'#0f6482','Firewood mix':'#1f6f80','LPG fuelled':'#2e7b7f','Alternative biomass':'#3e867d','Kerosene dependent':'#4d917b'};
+let cookingColors = {'Non Solid':'#00719a','Firewood-dependent':'#7da895','Firewood mix':'#e1b53d','LPG fuelled':'#abd7cf','Alternative biomass':'#bea487','Kerosene dependent':'#e68944'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
 $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampArgs,largeCampArgs,geomArgs,countriesArgs){
