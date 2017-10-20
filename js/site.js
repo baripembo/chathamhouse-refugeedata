@@ -35,7 +35,7 @@ function hxlProxyToJSON(input){
     return output;
 }
 
-function generateMap(geom,data,countryOverview) {
+function generateMap(geom,cookingPerCountry) {
     //remove loader
     $('.sp-circle').remove();
 
@@ -60,9 +60,9 @@ function generateMap(geom,data,countryOverview) {
 
         let iso3 = feature.properties['ISO_3'];
         if (iso3!=null) {
-            let num = data[iso3];
-            if (num!=undefined) {
-                clr = getColor(num);
+            let type = cookingPerCountry[iso3];
+            if (type!=undefined) {
+                clr = cookingColors[type];
                 fillOpacity = 0.7;
                 cls = '';
             }
@@ -111,11 +111,9 @@ function getColor(d) {
 
 function generateMapLegend() {
     let legend = $('#mapLegend');
-    let colors = {'500,000': '#005984', '100,000':'#267195', '50,000': '#4C89A6', '10,000': '#72A2B7', '5,000': '#98BAC8', '1,000': '#BED2D9'};
-
-    legend.append('<h5>Refugee Population</h5><ul></ul>');
-    for (let key in colors) {
-        legend.find('ul').append('<li><div class="color" style="background-color:' + colors[key] + '"></div> ' + key + '</li>');
+    legend.append('<h5>Cooking Fuel Source</h5><ul></ul>');
+    for (let key in cookingColors) {
+        legend.find('ul').append('<li><div class="color" style="background-color:' + cookingColors[key] + '"></div> ' + key + '</li>');
     }
 }
 
@@ -206,11 +204,6 @@ function buildModalInfo(camp, type='camp') {
 
     //pie/donut charts
     let cookingChart, lightingChart;
-    console.log(camp, cookingData);
-
-
-
-
     if (type=='camp') {
         cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
         lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
@@ -330,6 +323,50 @@ function getRefugeesPerCountry(datasets){
     return output;
 }
 
+function getCookingPerCountry(countries, nonCampData, largeCampData){
+    let output = {};
+    countries.forEach(function(country){
+        let cooking = {};
+        nonCampData.forEach(function(row){
+            if(row['#country+code']===country.code){
+                key = 'Non Solid';
+                value = Number(row['#indicator+expenditure+nonsolid+value']);
+                if(cooking[key] === undefined){
+                    cooking[key] = value;
+                } else {
+                    cooking[key] += value;
+                }
+
+                key = row['#indicator+cooking+text'];
+                value = Number(row['#indicator+expenditure+solid+value']);
+                if(cooking[key] === undefined){
+                    cooking[key] = value;
+                } else {
+                    cooking[key] += value;
+                }                
+            }
+        });
+
+        largeCampData.forEach(function(row){
+            if(row['#country+code']===country.code){
+                key = row['#indicator+cooking+text'];
+                value = Number(row['#indicator+expenditure+solid+value']);
+                if(cooking[key] === undefined){
+                    cooking[key] = value;
+                } else {
+                    cooking[key] += value;
+                }                
+            }
+        });
+
+        //get highest value from cooking
+        if (Object.keys(cooking).length>0) {
+            output[country.code] = Object.keys(cooking).reduce(function(a, b){ return cooking[a] > cooking[b] ? a : b });
+        }
+    });
+    return output;
+}
+
 function getCountryNames(datasets) {
     let output = {};
     datasets.forEach(function(row){
@@ -366,11 +403,11 @@ let countriesCall = $.ajax({
     dataType: 'json',
 });
 
-let countryOverview, refugeePopData, countryNames;
+let countryOverview, refugeePopData, countryNames, cookingPerCountry;
 let cookingChart, lightingChart;
 let charts = [];
-let lightingColors = {'On grid':'#629C8D','Torch-dependent':'#7CAB9F','Kerosene-dependent':'#96BBB2','Solar/mini-grid':'#B0CBC5','Solar/diesel':'#CADBD8','Solar-dependent':'#E4EBEB'};
-let cookingColors = {'Non Solid':'#005984','Firewood-dependent':'#267195','Firewood mix':'#4C89A6','Kerosene dependent':'#72A2B7','LPG fuelled':'#98BAC8','Alternative biomass':'#BED2D9'};
+let lightingColors = {'On grid':'#669CB5','Torch-dependent':'#68B597','Kerosene-dependent':'#9EA4F2','Solar/mini-grid':'#F2A99E','Solar/diesel':'#D47D71','Solar-dependent':'#7178D4'};
+let cookingColors = {'Non Solid':'#005A84','Firewood-dependent':'#4D917B','Firewood mix':'#5E68EA','LPG fuelled':'#EA6F5E','Alternative biomass':'#B72712','Kerosene dependent':'#121EB7'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
 $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampArgs,largeCampArgs,geomArgs,countriesArgs){
@@ -379,6 +416,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
     let geomData = topojson.feature(geomArgs[0],geomArgs[0].objects.geom);
     refugeePopData = getRefugeesPerCountry([nonCampData, largeCampData]);
     countryNames = getCountryNames(countriesArgs[0].countries);
+    cookingPerCountry = getCookingPerCountry(countriesArgs[0].countries, nonCampData, largeCampData);
 
     countryOverview = function(iso3) {
         let lighting = {};
@@ -542,7 +580,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         buildModalInfo(noncamp, 'noncamp');
     }
 
-    generateMap(geomData,refugeePopData,countryOverview);
+    generateMap(geomData,cookingPerCountry);
     generateMapLegend();
     buildLegend();
 });
