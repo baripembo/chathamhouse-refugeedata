@@ -34,7 +34,7 @@ h6 {
 	left: 25px;
 	padding: 10px;
 	position: absolute;
-	width: 155px;
+	width: 180px;
 	z-index: 400;
 }
 #mapLegend ul {
@@ -42,6 +42,7 @@ h6 {
     padding-left: 0;
 }
 #mapLegend li {
+	font-size: 12px;
     line-height: 20px;
     margin-bottom: 2px;
 }
