@@ -129,6 +129,9 @@ h6 {
 	padding-bottom: 12px;
 	border-bottom: 1px solid #ccc;
 }
+.overview-lighting {
+	padding-top: 20px;
+}
 
 @media only screen and (max-width: 768px) {
     .viz-container {

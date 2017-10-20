@@ -56,11 +56,11 @@ function generateMap(geom,data,countryOverview) {
         let borderClr = '#f2f2ef';
         let fillClr = '#08306b';
         let fillOpacity = 0;
-        cls = 'country'
+        cls = 'country';
 
         let iso3 = feature.properties['ISO_3'];
         if (iso3!=null) {
-            let num = data[iso3.toLowerCase()];
+            let num = data[iso3];
             if (num!=undefined) {
                 clr = getColor(num);
                 fillOpacity = 0.7;
@@ -120,7 +120,7 @@ function generateMapLegend() {
 }
 
 function mapClick(e) {
-    let iso3 = e.target.feature.properties['ISO_3'].toLowerCase();
+    let iso3 = e.target.feature.properties['ISO_3'];
     countryOverview(iso3);
     $('#countryModal').modal('show');
 
@@ -130,6 +130,9 @@ function mapClick(e) {
     for (var i=0; i<charts.length; i++) {
         charts[i].flush();
     }
+
+    cookingLabels = {};
+    lightingLabels = {};
     charts = [];
 }
 
@@ -139,11 +142,11 @@ function buildModalOverview(iso3, cooking, lighting) {
     let popTotal = refugeePopData[iso3];
     let modal = $('#countryModal');
 
-    //country title
-    modal.find('.modal-title').text(countryNames[iso3]);
-
     //pre-populate feedback form link
     setFormLink(countryNames[iso3]);
+
+    //country title
+    modal.find('.modal-title').text(countryNames[iso3]);
 
     //population
     modal.find('.overview-population span').text(popFormat(popTotal));
@@ -201,13 +204,18 @@ function buildModalInfo(camp, type='camp') {
     modal.find('.'+campCls+' .cooking').html( 'Exp/yr: $'+numFormat2(expTotalCooking)+'M<br>Per Cap: '+ getExpPerCapita(expTotalCooking, camp.pop) +'<br>Pop: '+ popFormat(camp.pop) );
     modal.find('.'+campCls+' .lighting').html( 'Exp/yr: $'+numFormat2(expTotalLighting)+'M<br>Per Cap: '+ getExpPerCapita(expTotalLighting, camp.pop) +'<br>Pop: '+ popFormat(camp.pop) );
 
-    //pie charts
+    //pie/donut charts
     let cookingChart, lightingChart;
+    console.log(camp, cookingData);
+
+
+
+
     if (type=='camp') {
         cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
         lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
     }
-    else {
+    else { //non-camp
         cookingChart = buildDonutChart('cooking'+camp.id, cookingData, 70, false);
         lightingChart = buildDonutChart('lighting'+camp.id, lightingData, 70, false);
         modal.find(campCls).css('border','1px solid #000');
@@ -325,7 +333,7 @@ function getRefugeesPerCountry(datasets){
 function getCountryNames(datasets) {
     let output = {};
     datasets.forEach(function(row){
-       output[row.code.toLowerCase()] = row.name;
+       output[row.code] = row.name;
     });
     return output;
 }
@@ -439,16 +447,6 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
             }
         });
 
-        //country overview data for cooking and lighting
-        //could use total as per capita rate as headline figures
-        // console.log('Country Overview');
-        // console.log(lighting);
-        // console.log(cooking);
-        // console.log('Example - urban sub cateogry');
-        // subCountryOverview(iso3,'urban');
-        //console.log('Example - camp');  
-        //campOverview('Buramino : Point');
-
         //build modal    
         buildModalOverview(iso3, cooking, lighting);
 
@@ -488,11 +486,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
                     cooking[key] += value;
                 }                
             }
-        });
-
-        //result of particular camp
-        // console.log('lighting',lighting);
-        // console.log('cooking',cooking);      
+        });     
 
         //build modal  
         camp.cooking = cooking;
@@ -541,12 +535,6 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
                 }                
             }
         });
-
-        //country overview data for cooking and lighting
-        //could use total as per capita rate as headline figures
-        // console.log(lighting);
-        // console.log(cooking); 
-
 
         //build modal  
         noncamp.cooking = cooking;
