@@ -135,19 +135,7 @@ function buildModalOverview(iso3, cooking, lighting) {
 
     $('#definitions').hide();
     $('#maincontent').show();
-
-    $('.definitions-link').on('click',function(event){
-        event.preventDefault();
-        if($('#maincontent').is(':visible')){
-            $('#definitions').show();
-            $('#maincontent').hide();
-            $('.definitions-link').html('Country Overview');
-        } else {
-            $('#definitions').hide();
-            $('#maincontent').show();
-            $('.definitions-link').html('Camp Defintions');
-        }
-    });
+    $('.definitions-link').html('Camp Defintions');
 
     //country title
     modal.find('.modal-title').text(countryNames[iso3]);
@@ -590,4 +578,20 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
     generateMap(geomData,cookingPerCountry);
     generateMapLegend();
     buildLegend();
+
+    $('.definitions-link').on('click',function(event){
+        event.preventDefault();
+        console.log('click');
+        if($('#maincontent').is(':visible')){
+            console.log('visible');
+            $('#definitions').show();
+            $('#maincontent').hide();
+            $('.definitions-link').html('Country Overview');
+        } else {
+            console.log('not visible');
+            $('#definitions').hide();
+            $('#maincontent').show();
+            $('.definitions-link').html('Camp Defintions');
+        }
+    });
 });
