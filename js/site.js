@@ -133,6 +133,10 @@ function buildModalOverview(iso3, cooking, lighting) {
     //pre-populate feedback form link
     setFormLink(countryNames[iso3]);
 
+    $('#definitions').hide();
+    $('#maincontent').show();
+    $('.definitions-link').html('Camp Defintions');
+
     //country title
     modal.find('.modal-title').text(countryNames[iso3]);
 
@@ -451,9 +455,9 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         });
 
         //sort camps by population
-        // largeCampData.sort(function(a, b) {
-        //     return parseFloat(b['#population+hh+num']) - parseFloat(a['#population+hh+num']);
-        // });
+        largeCampData.sort(function(a, b) {
+             return parseFloat(b['#population+hh+num']) - parseFloat(a['#population+hh+num']);
+        });
 
         largeCampData.forEach(function(row){
             if(row['#country+code']===iso3){
@@ -574,4 +578,20 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
     generateMap(geomData,cookingPerCountry);
     generateMapLegend();
     buildLegend();
+
+    $('.definitions-link').on('click',function(event){
+        event.preventDefault();
+        console.log('click');
+        if($('#maincontent').is(':visible')){
+            console.log('visible');
+            $('#definitions').show();
+            $('#maincontent').hide();
+            $('.definitions-link').html('Country Overview');
+        } else {
+            console.log('not visible');
+            $('#definitions').hide();
+            $('#maincontent').show();
+            $('.definitions-link').html('Camp Defintions');
+        }
+    });
 });
