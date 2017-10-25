@@ -126,12 +126,24 @@ h6 {
 	padding-right: 30px;
 	padding-top: 7px;
 }
+.definitions-link {
+	padding-right: 30px;
+	padding-top: 7px;
+}
 .divider {
 	padding-bottom: 12px;
 	border-bottom: 1px solid #ccc;
 }
 .overview-lighting {
 	padding-top: 20px;
+}
+
+#defintions {
+	display:none;
+}
+
+.def_table {
+	font-size:0.9em;
 }
 
 @media only screen and (max-width: 768px) {
