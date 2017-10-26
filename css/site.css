@@ -62,7 +62,7 @@ h6 {
 	width: 900px;
 }
 #countryModal .modal-body {
-	max-height: 700px;
+	max-height: 740px;
 	overflow: scroll;
 }
 #countryModal .modal-body .overview {
