@@ -116,7 +116,9 @@ function mapClick(e) {
     lightingChart.flush();
 
     for (var i=0; i<charts.length; i++) {
-        charts[i].flush();
+        if(charts[i]!=undefined){
+            charts[i].flush();
+        }
     }
 
     cookingLabels = {};
@@ -147,14 +149,14 @@ function buildModalOverview(iso3, cooking, lighting) {
     let cookingData = [];
     for (let prop in cooking) {
         expTotalCooking = (cooking[prop]==undefined) ? expTotalCooking : expTotalCooking + cooking[prop];
-        cookingData.push([prop, numFormat(cooking[prop])]);
+        cookingData.push([prop, numFormatSF(cooking[prop])]);
     }
 
     //lighting
     let lightingData = [];
     for (let prop in lighting) {
         expTotalLighting = (lighting[prop]==undefined) ? expTotalLighting : expTotalLighting + lighting[prop];
-        lightingData.push([prop, numFormat(lighting[prop])]);
+        lightingData.push([prop, numFormatSF(lighting[prop])]);
     }
 
     //totals
@@ -180,14 +182,14 @@ function buildModalInfo(camp, type='camp') {
     let cookingData = [];
     for (let key in camp.cooking) {
         expTotalCooking = (camp.cooking[key]==undefined) ? expTotalCooking : expTotalCooking + camp.cooking[key];
-        cookingData.push([key, numFormat(camp.cooking[key])]);
+        cookingData.push([key, numFormatSF(camp.cooking[key])]);
     }
 
     //lighting
     let lightingData = [];
     for (let key in camp.lighting) {
         expTotalLighting = (camp.lighting[key]==undefined) ? expTotalLighting : expTotalLighting + camp.lighting[key];
-        lightingData.push([key, numFormat(camp.lighting[key])]);
+        lightingData.push([key, numFormatSF(camp.lighting[key])]);
     }
 
     modal.find('.info .location').append('<div class="row camp '+campCls+'"><div class="col-sm-2 col-xs-12 info-labels">'+camp.name+'</div><div class="col-xs-2" id="'+ cookingChartID +'"></div><div class="col-sm-3 col-xs-4 cooking"></div><div class="col-xs-2" id="'+lightingChartID+'"></div><div class="col-sm-3 col-xs-4 lighting"></div></div>');
@@ -199,8 +201,8 @@ function buildModalInfo(camp, type='camp') {
     //pie/donut charts
     let cookingChart, lightingChart;
     if (type=='camp') {
-        cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
-        lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
+        cookingChart = buildSquareChart('cooking'+camp.id, cookingData, 70, false);
+        lightingChart = buildSquareChart('lighting'+camp.id, lightingData, 70, false);
     }
     else { //non-camp
         cookingChart = buildDonutChart('cooking'+camp.id, cookingData, 70, false);
@@ -245,6 +247,27 @@ function buildPieChart(title, data, height, showLegend=true) {
         }
     });
     return chart;
+}
+
+function buildSquareChart(title, data, height, showLegend=true){
+    let clrs = (title.indexOf('cooking')>-1) ? 'cooking' : 'lighting';
+    let svgContainer = d3.select('#'+title+'Chart').append("svg")
+        .attr("width", height)
+        .attr("height", height);
+    let d = data[0][0];
+    let rectangle = svgContainer.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", height)
+        .attr("height", height)
+        .attr("fill", function () {
+                var colors = pieColors[clrs];
+                if(typeof d === 'object') {
+                    return colors[d.id];
+                }else {
+                    return colors[d];
+                }
+            });
 }
 
 function buildDonutChart(title, data, height, showLegend=true) {
@@ -371,6 +394,7 @@ function getCountryNames(datasets) {
 
 let numFormat = function(d){return d3.format('.2f')(d)};
 let numFormat2 = function(d){return d3.format('.3f')(d)};
+let numFormatSF = function(d){return d3.format('.2g')(d)};
 let popFormat = d3.format('.2s');
 
 let nonCampCall = $.ajax({ 
@@ -587,7 +611,7 @@ $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampAr
         } else {
             $('#definitions').hide();
             $('#maincontent').show();
-            $('.definitions-link').html('Camp Defintions');
+            $('.definitions-link').html('Camp Definitions');
         }
     });
 });
