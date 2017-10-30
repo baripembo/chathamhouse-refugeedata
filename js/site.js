@@ -342,10 +342,10 @@ function getRefugeesPerCountry(datasets){
 
 function getCookingPerCountry(countries, nonCampData, largeCampData){
     let output = {};
-    countries.forEach(function(country){
+    for (var country in countries) {
         let cooking = {};
         nonCampData.forEach(function(row){
-            if(row['#country+code']===country.code){
+            if(row['#country+code']===country){
                 key = 'Non Solid';
                 value = Number(row['#indicator+expenditure+nonsolid+value']);
                 if(cooking[key] === undefined){
@@ -365,7 +365,7 @@ function getCookingPerCountry(countries, nonCampData, largeCampData){
         });
 
         largeCampData.forEach(function(row){
-            if(row['#country+code']===country.code){
+            if(row['#country+code']===country){
                 key = row['#indicator+cooking+text'];
                 value = Number(row['#indicator+expenditure+solid+value']);
                 if(cooking[key] === undefined){
@@ -378,16 +378,20 @@ function getCookingPerCountry(countries, nonCampData, largeCampData){
 
         //get highest value from cooking
         if (Object.keys(cooking).length>0) {
-            output[country.code] = Object.keys(cooking).reduce(function(a, b){ return cooking[a] > cooking[b] ? a : b });
+            output[country] = Object.keys(cooking).reduce(function(a, b){ return cooking[a] > cooking[b] ? a : b });
         }
-    });
+    }
     return output;
 }
 
 function getCountryNames(datasets) {
-    let output = {};
+    let output = [];
     datasets.forEach(function(row){
-       output[row.code] = row.name;
+        // let obj = {};
+        // obj.code = row['#country+code'];
+        // obj.name = row['#country+name'];
+        // output.push(obj);
+        output[row['#country+code']] = row['#country+name'];
     });
     return output;
 }
@@ -415,12 +419,6 @@ let geomCall = $.ajax({
     dataType: 'json',
 });
 
-let countriesCall = $.ajax({ 
-    type: 'GET', 
-    url: 'data/countries.json',
-    dataType: 'json',
-});
-
 let countryOverview, refugeePopData, countryNames, cookingPerCountry;
 let cookingChart, lightingChart;
 let charts = [];
@@ -428,13 +426,13 @@ let lightingColors = {'On grid':'#8bb2cd','Torch-dependent':'#bdd2c8','Kerosene-
 let cookingColors = {'Non Solid':'#00719a','Firewood-dependent':'#7da895','Firewood mix':'#bea487','LPG fuelled':'#abd7cf','Alternative biomass':'#e1b53d','Kerosene dependent':'#e68944'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
-$.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampArgs,largeCampArgs,geomArgs,countriesArgs){
+$.when(nonCampCall,largeCampCall,geomCall).then(function(nonCampArgs,largeCampArgs,geomArgs){
     let nonCampData = hxlProxyToJSON(nonCampArgs[0]);
     let largeCampData = hxlProxyToJSON(largeCampArgs[0]);
     let geomData = topojson.feature(geomArgs[0],geomArgs[0].objects.geom);
     refugeePopData = getRefugeesPerCountry([nonCampData, largeCampData]);
-    countryNames = getCountryNames(countriesArgs[0].countries);
-    cookingPerCountry = getCookingPerCountry(countriesArgs[0].countries, nonCampData, largeCampData);
+    countryNames = getCountryNames(nonCampData, largeCampData);
+    cookingPerCountry = getCookingPerCountry(countryNames, nonCampData, largeCampData);
 
     countryOverview = function(iso3) {
         let lighting = {};
