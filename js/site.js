@@ -205,8 +205,8 @@ function buildModalInfo(camp, type='camp') {
         lightingChart = buildSquareChart('lighting'+camp.id, lightingData, 70, false);
     }
     else { //non-camp
-        cookingChart = buildDonutChart('cooking'+camp.id, cookingData, 70, false);
-        lightingChart = buildDonutChart('lighting'+camp.id, lightingData, 70, false);
+        cookingChart = buildPieChart('cooking'+camp.id, cookingData, 70, false);
+        lightingChart = buildPieChart('lighting'+camp.id, lightingData, 70, false);
         modal.find(campCls).css('border','1px solid #000');
     }
 
@@ -425,7 +425,7 @@ let countryOverview, refugeePopData, countryNames, cookingPerCountry;
 let cookingChart, lightingChart;
 let charts = [];
 let lightingColors = {'On grid':'#8bb2cd','Torch-dependent':'#bdd2c8','Kerosene-dependent':'#f2d9a3','Solar/mini-grid':'#d8ece8','Solar/diesel':'#dfd0c0','Solar-dependent':'#f4c5a0'};
-let cookingColors = {'Non Solid':'#00719a','Firewood-dependent':'#7da895','Firewood mix':'#e1b53d','LPG fuelled':'#abd7cf','Alternative biomass':'#bea487','Kerosene dependent':'#e68944'};
+let cookingColors = {'Non Solid':'#00719a','Firewood-dependent':'#7da895','Firewood mix':'#bea487','LPG fuelled':'#abd7cf','Alternative biomass':'#e1b53d','Kerosene dependent':'#e68944'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
 $.when(nonCampCall,largeCampCall,geomCall,countriesCall).then(function(nonCampArgs,largeCampArgs,geomArgs,countriesArgs){
