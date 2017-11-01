@@ -331,9 +331,9 @@ function getRefugeesPerCountry(datasets){
         dataset.forEach(function(row){
             let country = row['#country+code'];
             if(output[country]===undefined){
-                output[country] = Math.round(Number(row['#population+hh+num']));
+                output[country] = Math.round(Number(row['#population+num']));
             } else {
-                output[country] += Math.round(Number(row['#population+hh+num']));
+                output[country] += Math.round(Number(row['#population+num']));
             }
         });      
     });
@@ -477,7 +477,7 @@ $.when(nonCampCall,largeCampCall,geomCall).then(function(nonCampArgs,largeCampAr
 
         //sort camps by population
         largeCampData.sort(function(a, b) {
-             return parseFloat(b['#population+hh+num']) - parseFloat(a['#population+hh+num']);
+             return parseFloat(b['#population+num']) - parseFloat(a['#population+num']);
         });
 
         largeCampData.forEach(function(row){
@@ -525,7 +525,7 @@ $.when(nonCampCall,largeCampCall,geomCall).then(function(nonCampArgs,largeCampAr
             if(row['#loc+name']===campname){
                 let key = row['#indicator+lighting+text'];
                 let value = Number(row['#indicator+expenditure+offgrid+value']);
-                camp.pop = Number(row['#population+hh+num']);
+                camp.pop = Number(row['#population+num']);
                 if(lighting[key] === undefined){
                     lighting[key] = value;
                 } else {
@@ -557,7 +557,7 @@ $.when(nonCampCall,largeCampCall,geomCall).then(function(nonCampArgs,largeCampAr
             if(row['#country+code']===iso3){
                 let key = 'On grid';
                 let value = Number(row['#indicator+expenditure+grid+value']);
-                noncamp.pop += Math.round(row['#population+hh+num']);
+                noncamp.pop += Math.round(row['#population+num']);
                 if(lighting[key] === undefined){
                     lighting[key] = value;
                 } else {
