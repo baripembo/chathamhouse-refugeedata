@@ -328,7 +328,6 @@ function getExpPerCapita(total, pop) {
 function getRefugeesPerCountry(datasets){
     let output = {};
     datasets.forEach(function(dataset){
-        console.log(dataset);
         dataset.forEach(function(row){
             let country = row['#country+code'];
             if(output[country]===undefined){
@@ -338,13 +337,11 @@ function getRefugeesPerCountry(datasets){
             }
         });      
     });
-    console.log(output);
     return output;
 }
 
 function getCookingPerCountry(countries, nonCampData, largeCampData){
     let output = {};
-    console.log(countries);
     for (var country in countries) {
         let cooking = {};
         nonCampData.forEach(function(row){
