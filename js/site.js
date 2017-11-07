@@ -328,6 +328,7 @@ function getExpPerCapita(total, pop) {
 function getRefugeesPerCountry(datasets){
     let output = {};
     datasets.forEach(function(dataset){
+        console.log(dataset);
         dataset.forEach(function(row){
             let country = row['#country+code'];
             if(output[country]===undefined){
@@ -337,11 +338,13 @@ function getRefugeesPerCountry(datasets){
             }
         });      
     });
+    console.log(output);
     return output;
 }
 
 function getCookingPerCountry(countries, nonCampData, largeCampData){
     let output = {};
+    console.log(countries);
     for (var country in countries) {
         let cooking = {};
         nonCampData.forEach(function(row){
@@ -386,12 +389,14 @@ function getCookingPerCountry(countries, nonCampData, largeCampData){
 
 function getCountryNames(datasets) {
     let output = [];
-    datasets.forEach(function(row){
+    datasets.forEach(function(dataset){
+        dataset.forEach(function(row){
         // let obj = {};
         // obj.code = row['#country+code'];
         // obj.name = row['#country+name'];
         // output.push(obj);
-        output[row['#country+code']] = row['#country+name'];
+            output[row['#country+code']] = row['#country+name'];
+        });
     });
     return output;
 }
@@ -431,7 +436,7 @@ $.when(nonCampCall,largeCampCall,geomCall).then(function(nonCampArgs,largeCampAr
     let largeCampData = hxlProxyToJSON(largeCampArgs[0]);
     let geomData = topojson.feature(geomArgs[0],geomArgs[0].objects.geom);
     refugeePopData = getRefugeesPerCountry([nonCampData, largeCampData]);
-    countryNames = getCountryNames(nonCampData, largeCampData);
+    countryNames = getCountryNames([nonCampData, largeCampData]);
     cookingPerCountry = getCookingPerCountry(countryNames, nonCampData, largeCampData);
 
     countryOverview = function(iso3) {
