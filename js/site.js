@@ -7,6 +7,9 @@ let campURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da
 let largeCampsURL = 'https://feature-data.humdata.org/hxlproxy/data.json?filter01=select&select-query01-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+campURL;
 let smallCampsURL = '';
 
+let popURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/8ad158ec-c5d2-4a60-8c32-f5c217a9a206/download/population.csv');
+let popURL = 'https://proxy.hxlstandard.org/data.json?strip-headers=on&url='+popURL;
+
 function hxlProxyToJSON(input){
     let output = [];
     let keys=[]
@@ -325,18 +328,16 @@ function getExpPerCapita(total, pop) {
         return '$'+numFormat((total*1000000)/pop);
 }
 
-function getRefugeesPerCountry(datasets){
+function getRefugeesPerCountry(dataset){
     let output = {};
-    datasets.forEach(function(dataset){
-        dataset.forEach(function(row){
-            let country = row['#country+code'];
-            if(output[country]===undefined){
-                output[country] = Math.round(Number(row['#population+num']));
-            } else {
-                output[country] += Math.round(Number(row['#population+num']));
-            }
-        });      
-    });
+    dataset.forEach(function(row){
+        let country = row['#country+code'];
+        if(output[country]===undefined){
+            output[country] = Math.round(Number(row['#population+num']));
+        } else {
+            output[country] += Math.round(Number(row['#population+num']));
+        }
+    });      
     return output;
 }
 
@@ -415,6 +416,12 @@ let largeCampCall = $.ajax({
     dataType: 'json',
 });
 
+let popCall = $.ajax({ 
+    type: 'GET', 
+    url: popURL,
+    dataType: 'json',
+});
+
 let geomCall = $.ajax({ 
     type: 'GET', 
     url: 'data/geom.json',
@@ -428,11 +435,12 @@ let lightingColors = {'On grid':'#8bb2cd','Torch-dependent':'#bdd2c8','Kerosene-
 let cookingColors = {'Non Solid':'#00719a','Firewood-dependent':'#7da895','Firewood mix':'#bea487','LPG fuelled':'#abd7cf','Alternative biomass':'#e1b53d','Kerosene dependent':'#e68944'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
-$.when(nonCampCall,largeCampCall,geomCall).then(function(nonCampArgs,largeCampArgs,geomArgs){
+$.when(nonCampCall,largeCampCall,geomCall,popCall).then(function(nonCampArgs,largeCampArgs,geomArgs,popArgs){
     let nonCampData = hxlProxyToJSON(nonCampArgs[0]);
     let largeCampData = hxlProxyToJSON(largeCampArgs[0]);
     let geomData = topojson.feature(geomArgs[0],geomArgs[0].objects.geom);
-    refugeePopData = getRefugeesPerCountry([nonCampData, largeCampData]);
+    let popData = hxlProxyToJSON(popArgs[0]);
+    refugeePopData = getRefugeesPerCountry(popData);
     countryNames = getCountryNames([nonCampData, largeCampData]);
     cookingPerCountry = getCookingPerCountry(countryNames, nonCampData, largeCampData);
 
