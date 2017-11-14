@@ -8,7 +8,7 @@ let largeCampsURL = 'https://feature-data.humdata.org/hxlproxy/data.json?filter0
 let smallCampsURL = '';
 
 let popURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/8ad158ec-c5d2-4a60-8c32-f5c217a9a206/download/population.csv');
-let popURL = 'https://proxy.hxlstandard.org/data.json?strip-headers=on&url='+popURL;
+popURL = 'https://proxy.hxlstandard.org/data.json?strip-headers=on&url='+popURL;
 
 function hxlProxyToJSON(input){
     let output = [];
