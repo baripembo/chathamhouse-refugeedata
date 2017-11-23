@@ -347,7 +347,7 @@ function getCookingPerCountry(countries, nonCampData, largeCampData){
         let cooking = {};
         nonCampData.forEach(function(row){
             if(row['#country+code']===country){
-                key = 'Non Solid';
+                key = 'LPG/Natural Gas';
                 value = Number(row['#indicator+expenditure+nonsolid+value']);
                 if(cooking[key] === undefined){
                     cooking[key] = value;
@@ -467,7 +467,7 @@ $.when(nonCampCall,largeCampCall,geomCall,popCall).then(function(nonCampArgs,lar
                     lighting[key] += value;
                 }
                 
-                key = 'Non Solid';
+                key = 'LPG/Natural Gas';
                 value = Number(row['#indicator+expenditure+nonsolid+value']);
                 if(cooking[key] === undefined){
                     cooking[key] = value;
@@ -582,7 +582,7 @@ $.when(nonCampCall,largeCampCall,geomCall,popCall).then(function(nonCampArgs,lar
                     lighting[key] += value;
                 }
                 
-                key = 'Non Solid';
+                key = 'LPG/Natural Gas';
                 value = Number(row['#indicator+expenditure+nonsolid+value']);
                 if(cooking[key] === undefined){
                     cooking[key] = value;
