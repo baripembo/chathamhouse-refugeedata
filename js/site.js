@@ -431,8 +431,8 @@ let geomCall = $.ajax({
 let countryOverview, refugeePopData, countryNames, cookingPerCountry;
 let cookingChart, lightingChart;
 let charts = [];
-let lightingColors = {'On grid':'#8bb2cd','Torch-dependent':'#bdd2c8','Kerosene-dependent':'#f2d9a3','Solar/mini-grid':'#d8ece8','Solar/diesel':'#dfd0c0','Solar-dependent':'#f4c5a0'};
-let cookingColors = {'Non Solid':'#00719a','Firewood-dependent':'#7da895','Firewood mix':'#bea487','LPG fuelled':'#abd7cf','Alternative biomass':'#e1b53d','Kerosene dependent':'#e68944'};
+let lightingColors = {'On grid':'#8bb2cd','Torch dependent':'#bdd2c8','Kerosene dependent':'#f2d9a3','Solar dependent':'#f4c5a0'};
+let cookingColors = {'LPG/Natural Gas':'#00719a','Firewood dependent':'#7da895','Firewood/charcoal mix':'#bea487','Alternative biomass':'#e1b53d','Kerosene dependent':'#e68944'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
 $.when(nonCampCall,largeCampCall,geomCall,popCall).then(function(nonCampArgs,largeCampArgs,geomArgs,popArgs){
