@@ -1,14 +1,14 @@
 let urbanURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/599be5e3-35ad-4352-8fa8-377b085ab861/download/urban_consumption.csv');
 let slumURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/a3d57e6c-627a-4279-b5d7-06d6d1e16f8c/download/slum_consumption.csv');
 let ruralURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/061b343d-6fd8-4505-97f2-9ebd46728968/download/rural_consumption.csv');
-let nonCampURL = 'https://feature-data.humdata.org/hxlproxy/data.json?filter01=add&add-tag01=%23indicator%2Blocation&add-value01=urban&filter02=append&append-dataset02-01='+slumURL+'&filter03=replace&replace-pattern03=%5E%24&replace-regex03=on&replace-value03=slum&replace-tags03=%23indicator%2Blocation&filter04=append&append-dataset04-01='+ruralURL+'&filter05=replace&replace-pattern05=%5E%24&replace-regex05=on&replace-value05=rural&replace-tags05=%23indicator%2Blocation&filter06=select&select-query06-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+urbanURL;
+let nonCampURL = 'https://data.humdata.org/hxlproxy/data.json?filter01=add&add-tag01=%23indicator%2Blocation&add-value01=urban&filter02=append&append-dataset02-01='+slumURL+'&filter03=replace&replace-pattern03=%5E%24&replace-regex03=on&replace-value03=slum&replace-tags03=%23indicator%2Blocation&filter04=append&append-dataset04-01='+ruralURL+'&filter05=replace&replace-pattern05=%5E%24&replace-regex05=on&replace-value05=rural&replace-tags05=%23indicator%2Blocation&filter06=select&select-query06-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+urbanURL;
 
 let campURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/54992e56-7918-4c05-84b2-2a7bef4f95cd/download/camp_consumption.csv');
-let largeCampsURL = 'https://feature-data.humdata.org/hxlproxy/data.json?filter01=select&select-query01-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+campURL;
+let largeCampsURL = 'https://data.humdata.org/hxlproxy/data.json?filter01=select&select-query01-01=%23indicator%2Btier%3DBaseline&strip-headers=on&url='+campURL;
 let smallCampsURL = '';
 
 let popURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/8ad158ec-c5d2-4a60-8c32-f5c217a9a206/download/population.csv');
-popURL = 'https://proxy.hxlstandard.org/data.json?strip-headers=on&url='+popURL;
+popURL = 'https://data.humdata.org/hxlproxy/data.json?strip-headers=on&url='+popURL;
 
 function hxlProxyToJSON(input){
     let output = [];
