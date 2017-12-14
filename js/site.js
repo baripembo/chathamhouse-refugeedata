@@ -1,3 +1,4 @@
+let datasetURL = 'https://feature-data.humdata.org/api/action/package_show?id=energy-consumption-of-refugees-and-displaced-people';
 let urbanURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/599be5e3-35ad-4352-8fa8-377b085ab861/download/urban_consumption.csv');
 let slumURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/a3d57e6c-627a-4279-b5d7-06d6d1e16f8c/download/slum_consumption.csv');
 let ruralURL = encodeURIComponent('https://feature-data.humdata.org/dataset/dc9da294-26af-4f22-9f0c-8acfb0cdf17e/resource/061b343d-6fd8-4505-97f2-9ebd46728968/download/rural_consumption.csv');
@@ -389,10 +390,6 @@ function getCountryNames(datasets) {
     let output = [];
     datasets.forEach(function(dataset){
         dataset.forEach(function(row){
-        // let obj = {};
-        // obj.code = row['#country+code'];
-        // obj.name = row['#country+name'];
-        // output.push(obj);
             output[row['#country+code']] = row['#country+name'];
         });
     });
@@ -403,6 +400,13 @@ let numFormat = function(d){return d3.format('.2f')(d)};
 let numFormat2 = function(d){return d3.format('.3f')(d)};
 let numFormatSF = function(d){return d3.format('.2g')(d)};
 let popFormat = d3.format('.2s');
+
+
+let datasetCall = $.ajax({ 
+    type: 'GET', 
+    url: datasetURL,
+    dataType: 'json',
+});
 
 let nonCampCall = $.ajax({ 
     type: 'GET', 
@@ -428,6 +432,7 @@ let geomCall = $.ajax({
     dataType: 'json',
 });
 
+let datasetDate;
 let countryOverview, refugeePopData, countryNames, cookingPerCountry;
 let cookingChart, lightingChart;
 let charts = [];
@@ -435,7 +440,7 @@ let lightingColors = {'On grid':'#8bb2cd','Torch dependent':'#bdd2c8','Kerosene 
 let cookingColors = {'LPG/Natural Gas':'#00719a','Firewood dependent':'#7da895','Firewood/charcoal mix':'#bea487','Alternative biomass':'#e1b53d','Kerosene dependent':'#e68944'};
 let pieColors = {'cooking':cookingColors,'lighting':lightingColors};
 
-$.when(nonCampCall,largeCampCall,geomCall,popCall).then(function(nonCampArgs,largeCampArgs,geomArgs,popArgs){
+$.when(datasetCall, nonCampCall,largeCampCall,geomCall,popCall).then(function(datasetArgs, nonCampArgs,largeCampArgs,geomArgs,popArgs){
     let nonCampData = hxlProxyToJSON(nonCampArgs[0]);
     let largeCampData = hxlProxyToJSON(largeCampArgs[0]);
     let geomData = topojson.feature(geomArgs[0],geomArgs[0].objects.geom);
@@ -443,11 +448,15 @@ $.when(nonCampCall,largeCampCall,geomCall,popCall).then(function(nonCampArgs,lar
     refugeePopData = getRefugeesPerCountry(popData);
     countryNames = getCountryNames([nonCampData, largeCampData]);
     cookingPerCountry = getCookingPerCountry(countryNames, nonCampData, largeCampData);
+    datasetDate = datasetArgs[0].result.dataset_date
 
     countryOverview = function(iso3) {
         let lighting = {};
         let cooking = {};
         let camps = [];
+
+        //set date
+        $('.modal-footer .date').html('Data last modified '+datasetDate);
 
         nonCampData.forEach(function(row){
             if(row['#country+code']===iso3){

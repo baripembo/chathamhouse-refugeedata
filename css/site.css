@@ -26,6 +26,7 @@ h6 {
 }
 #map {
 	height: 500px;
+	margin-top: 20px;
 }
 #mapLegend {
 	background-color: rgba(255, 255, 255, 0.9);
@@ -59,11 +60,12 @@ h6 {
 	padding: 10px 15px;
 }
 #countryModal .modal-dialog {
-	width: 900px;
+	width: 1040px;
 }
 #countryModal .modal-body {
-	max-height: 740px;
+	max-height: 800px;
 	overflow: scroll;
+	padding-bottom: 0;
 }
 #countryModal .modal-body .overview {
 	border-right: 1px solid #e5e5e5;
@@ -120,15 +122,16 @@ h6 {
 	margin-top: 10px;
 }
 .modal-header .close {
+	font-size: 26px;
 	margin-top: 6px;
 }
 .form-link {
 	padding-right: 30px;
-	padding-top: 7px;
+	padding-top: 9px;
 }
 .definitions-link {
 	padding-right: 30px;
-	padding-top: 7px;
+	padding-top: 9px;
 }
 .divider {
 	padding-bottom: 12px;
@@ -144,6 +147,20 @@ h6 {
 
 .def_table {
 	font-size:0.9em;
+}
+
+.footnote {
+	font-size: 0.9em;
+	margin-top: 40px;
+}
+#maincontent .footnote {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+.modal-footer .date {
+	font-size: 0.9em;
+	font-style: italic;
+	padding-top: 9px;
 }
 
 @media only screen and (max-width: 768px) {
